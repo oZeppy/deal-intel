@@ -1,21 +1,25 @@
 #!/usr/bin/env bash
 # Exercises the deal-room skill end to end on a synthetic workspace with Claude Code in non-interactive mode.
-# Usage: test/run.sh [--long] [--model <model>]
+# Usage: [PLUGIN_DIR=<plugin folder>] test/run.sh [--long] [--model <model>]
 set -euo pipefail
 ROOT=$(cd "$(dirname "$0")/.." && pwd)
 LONG=0; MODEL_ARGS=()
 while [ $# -gt 0 ]; do case "$1" in --long) LONG=1;; --model) MODEL_ARGS=(--model "$2"); shift;; esac; shift; done
 WS=$(mktemp -d "${TMPDIR:-/tmp}/deal-intel-test.XXXXXX")
 cp -R "$ROOT/workspace-example/." "$WS/"
+# PLUGIN_DIR=<path to a plugin folder> loads the skills through Claude Code's plugin loader instead of local symlinks
+# (e.g. a fresh clone of the published repo: PLUGIN_DIR=/tmp/clone/plugins/deal-intel test/run.sh).
+PLUGIN_ARGS=(); if [ -n "${PLUGIN_DIR:-}" ]; then PLUGIN_ARGS=(--plugin-dir "$PLUGIN_DIR"); else
 mkdir -p "$WS/.claude/skills"
 for s in deal-room forecast closed-lost; do ln -s "$ROOT/plugins/deal-intel/skills/$s" "$WS/.claude/skills/$s"; done
+fi
 if [ "$LONG" = 1 ]; then "$ROOT/test/make-long-fixture.sh" "$WS/inbox/2026-09-24 Pinecrest Family Law Group - demo (long).md" >/dev/null; else cp "$ROOT/fixtures/inbox/"* "$WS/inbox/"; fi
 FIX=$(ls "$WS/inbox/")
 FIELDS=$(cat "$ROOT/fixtures/salesforce/opportunities.json")
 PROMPT="The Salesforce connector is NOT available in this session, so do not try to call it. Use the /deal-room skill and run: /deal-room ingest. When you need opportunity fields to create a room, use exactly these (do not ask): $FIELDS . Do not ask any questions; make reasonable choices and finish the whole job."
 echo "workspace: $WS"; echo "fixture: $FIX"
 cd "$WS"
-claude -p "$PROMPT" --dangerously-skip-permissions ${MODEL_ARGS[@]+"${MODEL_ARGS[@]}"} > "$WS/run.log" 2>&1 || { echo "claude exited non-zero"; tail -40 "$WS/run.log"; exit 1; }
+claude -p "$PROMPT" --dangerously-skip-permissions ${MODEL_ARGS[@]+"${MODEL_ARGS[@]}"} ${PLUGIN_ARGS[@]+"${PLUGIN_ARGS[@]}"} > "$WS/run.log" 2>&1 || { echo "claude exited non-zero"; tail -40 "$WS/run.log"; exit 1; }
 echo "--- assertions ---"
 fail=0
 DEAL=$(ls -d "$WS"/deals/*/ 2>/dev/null | head -1 || true)
