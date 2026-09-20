@@ -69,4 +69,4 @@ Every run ends with one status line. If Salesforce fails, the line says exactly 
 
 ## Then text me
 
-What worked, what did not, and what it said when it failed. I fix by editing the skill text and send you a new zip. I never need your data.
+What worked, what did not, and what it said when it failed. I fix by editing the skill text and pushing it; you click Update on the marketplace (or, on the zip route, I send a new zip). I never need your data.
