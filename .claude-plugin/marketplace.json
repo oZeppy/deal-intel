@@ -1,0 +1,12 @@
+{
+  "name": "ethan-burstein",
+  "description": "Plugins by Ethan Burstein for account executives: deal rooms, forecasts, closed-lost tracking.",
+  "owner": { "name": "Ethan Burstein" },
+  "plugins": [
+    {
+      "name": "deal-intel",
+      "source": "./plugins/deal-intel",
+      "description": "Deal rooms, a weekly forecast, and closed-lost tracking for a mid-market account executive, built on the Claude connectors an admin already enabled (Salesforce, Slack, Gmail). No API keys, no external services."
+    }
+  ]
+}

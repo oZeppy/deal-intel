@@ -1,0 +1,5 @@
+.DS_Store
+fixtures/long/
+test/last-run*.txt
+*.log
+dist/
