@@ -19,7 +19,7 @@ There is a sample transcript already in `inbox` (Pinecrest Family Law Group; not
 
     /deal-room ingest
 
-It will ask which deal the file belongs to, because Pinecrest is not in your Salesforce. Reply:
+It will ask what to do, because Pinecrest is not in your Salesforce. Taking the recommended option (create the room, Salesforce block pending) is fine: the brief then marks stage, MRR and close date as pending instead of inventing them. Or paste this to fill them in:
 
     Pinecrest is made up and not in Salesforce. Create the room with these fields: Stage 3 - Discovery, MRR 9120, close date 2026-12-15, next step "Pricing and migration plan by Sep 17, demo Sep 24".
 
