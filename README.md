@@ -5,7 +5,7 @@ Three Claude skills for a mid-market account executive at a legal-software vendo
 | Skill | What it does | Trigger |
 |---|---|---|
 | `start` | First-run setup: creates the workspace folders, `deal-judgment.md` and `templates/forecast-message.md` in the current folder, plus a synthetic sample transcript to test on. Never overwrites. | `/start` |
-| `deal-room` | One folder per opportunity. Files Gong transcripts from `inbox/`, writes structured call notes with quotes, keeps a living brief (`DEAL.md`), answers "what did they say about X" with citations. | `/deal-room new`, `ingest`, `sync`, `ask`, `brief`, `list` |
+| `deal-room` | One folder per opportunity. Files Gong transcripts from `inbox/`, writes structured call notes with quotes, keeps a living brief (`DEAL.md`), answers "what did they say about X" with citations. | `/deal-room new`, `ingest`, `sync`, `ask`, `show`, `refresh`, `list` |
 | `forecast` | Builds the Wednesday Best Case / Commit list from Salesforce, the rep picks, drafts the manager's exact format, posts to Slack only on "send". | `/forecast` (or a Cowork scheduled task, Wednesdays) |
 | `closed-lost` | Pulls newly closed-lost opportunities into a triage queue; priority / nurture / reject with revisit dates; `due` lists what to re-engage. | `/closed-lost sync`, `triage`, `due`, `list` |
 
@@ -75,7 +75,7 @@ Cowork scheduled tasks run in Anthropic's cloud on a fixed cadence and can use c
 
 ## Testing
 
-`test/run-start.sh` runs `/start` in an empty temp folder through Claude Code non-interactively with the plugin loaded, and asserts the four folders, the two template files byte-for-byte, the sample transcript byte-identical to the fixture, that nothing else was created, and that the closing message names `/deal-room ingest`. `test/check-templates.sh` (also called at the top of `test/run.sh`) fails if the start skill's templates drift from the originals they were copied from.
+`test/run-start.sh` runs `/start` in an empty temp folder through Claude Code non-interactively with the plugin loaded, and asserts the four folders, the two template files byte-for-byte, the sample transcript byte-identical to the fixture, that nothing else was created, and that the closing message names `/deal-room ingest`. `test/check-templates.sh` (also called at the top of `test/run.sh`) fails if any shipped copy of a template drifts from the original it was copied from: the start skill's three, and the two in `workspace-example/`.
 
 `test/run.sh` builds a temp workspace from `workspace-example/`, drops the synthetic transcript in `fixtures/inbox/`, runs `/deal-room ingest` through Claude Code non-interactively (Salesforce connector deliberately absent), and asserts the room, notes, brief sections, key facts, verbatim move, and no bare probabilities. `test/run.sh --long` does the same with a ~20k-word transcript to exercise the read-to-the-end rule.
 

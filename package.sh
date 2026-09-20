@@ -19,7 +19,7 @@ STAGE=$(mktemp -d "${TMPDIR:-/tmp}/deal-intel-pkg.XXXXXX")
 PKG="$STAGE/deal-intel"; mkdir -p "$PKG/skills-to-upload" "$PKG/plugin-package"
 
 # 1. one zip per skill, folder as the zip root
-for s in deal-room forecast closed-lost; do
+for s in start deal-room forecast closed-lost; do
   (cd "$SRC/skills" && zip -qr "$PKG/skills-to-upload/$s.zip" "$s" -x '*.DS_Store')
 done
 
