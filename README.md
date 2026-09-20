@@ -4,11 +4,12 @@ Three Claude skills for a mid-market account executive at a legal-software vendo
 
 | Skill | What it does | Trigger |
 |---|---|---|
+| `start` | First-run setup: creates the workspace folders, `deal-judgment.md` and `templates/forecast-message.md` in the current folder, plus a synthetic sample transcript to test on. Never overwrites. | `/start` |
 | `deal-room` | One folder per opportunity. Files Gong transcripts from `inbox/`, writes structured call notes with quotes, keeps a living brief (`DEAL.md`), answers "what did they say about X" with citations. | `/deal-room new`, `ingest`, `sync`, `ask`, `brief`, `list` |
 | `forecast` | Builds the Wednesday Best Case / Commit list from Salesforce, the rep picks, drafts the manager's exact format, posts to Slack only on "send". | `/forecast` (or a Cowork scheduled task, Wednesdays) |
 | `closed-lost` | Pulls newly closed-lost opportunities into a triage queue; priority / nurture / reject with revisit dates; `due` lists what to re-engage. | `/closed-lost sync`, `triage`, `due`, `list` |
 
-All three read `deal-judgment.md`, the rep's own rules, before writing any assessment. That file is where "make it think like me" lives.
+The three working skills read `deal-judgment.md`, the rep's own rules, before writing any assessment; if it is missing they say the folder is not set up and stop, rather than scaffolding silently. That file is where "make it think like me" lives.
 
 ## Repository layout
 
@@ -32,13 +33,14 @@ Blockers to expect: no **Add marketplace** control (a Team/Enterprise Owner sett
 
 **Either route, then:**
 
-4. Pick a local working folder for Cowork (a trusted folder; Google Drive as a working folder is not documented, though a Drive for Desktop sync folder is just a local folder) and copy the contents of `workspace-example/` into it. That gives you `inbox/`, `deals/`, `closed-lost/`, `forecasts/`, `deal-judgment.md`, and `templates/forecast-message.md`.
+4. Pick a local working folder for Cowork (a trusted folder; Google Drive as a working folder is not documented, though a Drive for Desktop sync folder is just a local folder), open it as the folder Claude works in, and type `/start`. The `start` skill creates `inbox/`, `deals/`, `closed-lost/`, `forecasts/`, `deal-judgment.md` and `templates/forecast-message.md` there, and drops a synthetic sample transcript in `inbox/` so the first test needs no Salesforce. It never overwrites a file that already exists. On the zip route, copying the contents of `workspace-example/` into the folder is the manual equivalent.
 5. Fill in `deal-judgment.md` (numbered rules, in your words). Replace `templates/forecast-message.md` with the manager's real format.
 6. Connectors: the skills use whatever Salesforce, Slack and Gmail connectors the org admin enabled. If one is missing, the skill says so and stops; it never invents data.
 7. Invocation: type `/` in Cowork to list the installed skills, or describe the task in words; Claude matches a skill by its description. Plugins installed through the Claude Code terminal do not appear in Cowork.
 
 ## Daily use
 
+- **First run, once** → `/start` in the folder you picked. Creates the workspace and a sample transcript to test on.
 - **Assignment email arrives** → `/deal-room new <opportunity name>`. Room created from Salesforce fields.
 - **After a call** → `/deal-room sync <opportunity>`. If the Gong activity in Salesforce carries the transcript, it is filed automatically. If it carries only a summary or link, the summary is filed and the skill lists the Gong links; download those transcripts into `inbox/` and run `/deal-room ingest`.
 - **Any time** → `/deal-room ask <opportunity> when did they say they'd decide`.
@@ -72,6 +74,8 @@ Cowork scheduled tasks run in Anthropic's cloud on a fixed cadence and can use c
 - No bare probability numbers; assessments cite the rep's numbered rules.
 
 ## Testing
+
+`test/run-start.sh` runs `/start` in an empty temp folder through Claude Code non-interactively with the plugin loaded, and asserts the four folders, the two template files byte-for-byte, the sample transcript byte-identical to the fixture, that nothing else was created, and that the closing message names `/deal-room ingest`. `test/check-templates.sh` (also called at the top of `test/run.sh`) fails if the start skill's templates drift from the originals they were copied from.
 
 `test/run.sh` builds a temp workspace from `workspace-example/`, drops the synthetic transcript in `fixtures/inbox/`, runs `/deal-room ingest` through Claude Code non-interactively (Salesforce connector deliberately absent), and asserts the room, notes, brief sections, key facts, verbatim move, and no bare probabilities. `test/run.sh --long` does the same with a ~20k-word transcript to exercise the read-to-the-end rule.
 

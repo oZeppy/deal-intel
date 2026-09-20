@@ -8,14 +8,14 @@ Three Cowork skills: deal room, Wednesday forecast, closed-lost tracker. They ru
 2. Browse plugins > `deal-intel` > Install. It lands in your personal plugins, saved on your machine, not shared with your company.
    No "Add marketplace" option, or the add fails? That is a company setting or a network block on your side. Tell me. Fallback: the starter zip I emailed has three skill zips under `skills-to-upload`; Claude Desktop > Customize > Skills > + > + Create skill > Upload a skill, one zip at a time. Use one route only. If you ever switch, uninstall the other copy first, or the skills load twice.
 3. Updates: when I text "pushed a fix", go to Customize > Plugins > the marketplace > Update. No files.
-4. From the starter zip, make a folder for your deals, for example `Documents/Deals`, and copy everything inside `workspace-example` into it. You get `inbox`, `deals`, `closed-lost`, `forecasts`, `deal-judgment.md` and `templates`.
-5. In Cowork, start a session and give it the `Deals` folder as the folder Claude works in. After the first time it shows under Trusted folders. Pick it every time. Typing `/` in the chat lists the three skills.
+4. Make an empty folder for your deals, for example `Documents/Deals`. In Cowork, start a session and give it that folder as the folder Claude works in. After the first time it shows under Trusted folders. Pick it every time. Then type `/start` in the chat.
+5. `/start` sets the folder up: `inbox`, `deals`, `closed-lost`, `forecasts`, `deal-judgment.md` and `templates`, plus a sample transcript in `inbox` to test on. It never overwrites anything you already have. Typing `/` in the chat lists the skills. (On the zip fallback route there is no `/start`: copy everything inside `workspace-example` from the starter zip into the folder instead.)
 6. Optional now, needed by Wednesday: open `templates/forecast-message.md` and paste your manager's real format over the placeholder. The forecast skill will not draft until that is done.
 7. Optional now, worth 10 minutes soon: open `deal-judgment.md` and fill the [FILL] lines in your words. That is where "think like me" lives. The skills cite the rule numbers when they judge a deal.
 
 ## Test 1: a made-up firm, no Salesforce needed (5 min)
 
-There is a sample transcript already in `inbox` (Pinecrest Family Law Group; not a real firm). In Cowork, with the Deals folder open, type:
+`/start` put a sample transcript in `inbox` (Pinecrest Family Law Group; not a real firm). In Cowork, with the Deals folder open, type:
 
     /deal-room ingest
 

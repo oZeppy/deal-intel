@@ -63,6 +63,7 @@ Table of all deal folders: opportunity, stage, close date, last call date, numbe
 Read `deal-judgment.md` first, every time. It holds the rep's own rules for what makes a deal real, how he reads stages, and how he wants close probability reasoned. Apply those rules explicitly: "Per your rule 3 (a partner on the call who asks about migration = real), this is real; per rule 7, a stated Q1 timeline with no budget owner is Best Case, not Commit." Never output a bare probability number. If the rules do not cover the situation, say which rule is missing so the rep can add it.
 
 ## Rules
+- If `deal-judgment.md` is missing from the workspace, say "This folder is not set up yet. Run /start first." and stop. Do not scaffold the workspace silently.
 - Never send anything anywhere from this skill. It only reads connectors and writes files in the workspace.
 - Never modify a transcript. Never delete files; move them.
 - Prefer the rep's words over paraphrase in notes. Quotes are the evidence.

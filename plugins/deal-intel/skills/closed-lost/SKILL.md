@@ -34,6 +34,7 @@ List priority and nurture rows whose revisit date is within the next 14 days, or
 Counts per file, and the ten most recent in each.
 
 ## Rules
+- If `deal-judgment.md` is missing from the workspace, say "This folder is not set up yet. Run /start first." and stop. Do not scaffold the workspace silently.
 - Every command ends with one status line the rep can read at a glance: `closed-lost: synced N new · last_sync <timestamp> · errors: none` (or the exact error). A run that cannot reach Salesforce says so in that line; silence is never success.
 - Never send anything. Never delete rows. Never re-add an id already in `seen_ids`.
 - If the timeline picklist name differs in the rep's org, record the real API name in `state.json` under `"fields"` after the first successful sync and use it thereafter.

@@ -5,6 +5,8 @@ set -euo pipefail
 ROOT=$(cd "$(dirname "$0")/.." && pwd)
 LONG=0; MODEL_ARGS=()
 while [ $# -gt 0 ]; do case "$1" in --long) LONG=1;; --model) MODEL_ARGS=(--model "$2"); shift;; esac; shift; done
+echo "--- template checks ---"
+"$ROOT/test/check-templates.sh" || { echo "template drift; not spending a model run"; exit 1; }
 WS=$(mktemp -d "${TMPDIR:-/tmp}/deal-intel-test.XXXXXX")
 cp -R "$ROOT/workspace-example/." "$WS/"
 # PLUGIN_DIR=<path to a plugin folder> loads the skills through Claude Code's plugin loader instead of local symlinks

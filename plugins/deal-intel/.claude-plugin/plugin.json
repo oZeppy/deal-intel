@@ -1,6 +1,6 @@
 {
   "name": "deal-intel",
-  "version": "0.2.1",
+  "version": "0.3.0",
   "description": "Deal rooms, a weekly forecast, and closed-lost tracking for a mid-market account executive, built on the Claude connectors an admin already enabled (Salesforce, Slack, Gmail). No API keys, no external services.",
   "author": {
     "name": "Ethan Burstein"

@@ -27,6 +27,7 @@ Every Wednesday the manager asks for the deals expected to close this month and 
 List `forecasts/*.md` with the deals forecast each week and whether each has since closed (check Salesforce stage). Useful for "what did I forecast last month that slipped."
 
 ## Rules
+- If `deal-judgment.md` is missing from the workspace, say "This folder is not set up yet. Run /start first." and stop. Do not scaffold the workspace silently.
 - Nothing is sent without the word "send" from the rep in this session.
 - Numbers come from Salesforce in this run, never from a previous forecast file.
 - The "why" line is the rep's reasoning in his words when a deal room exists; otherwise it is a neutral fact (stage, next step), never invented sentiment.
