@@ -44,7 +44,7 @@ If the rep types the skill name alone, or says help / what can you do / options,
 - Exactly one match: use it, and name it in the first line of the answer ("Pinecrest Family Law Group, from 2 filed calls:").
 - Several matches: list them as numbered choices with account and last call date, "none of these" last, and ask which one. Never guess.
 - No name given: if exactly one deal folder exists, use it and say so; otherwise list the folders and ask which.
-- No match: say "No deal folder named <what he typed>. Deals on file: <list them, or say none yet>. Run `/deal-room new <opportunity>` to create one." Write nothing.
+- No match: say "No deal folder named <what was typed>. Deals on file: <list them, or say none yet>. Run `/deal-room new <opportunity>` to create one." Write nothing.
 
 Never answer "not in the filed calls" when no folder matched; that sentence is reserved for a folder that exists but does not hold the answer. Never answer from a folder you did not name in the answer.
 
@@ -88,7 +88,7 @@ Procedure:
 1. Query Gong Conversation records whose Primary Opportunity is this opportunity (fall back to related-opportunity records, then to Tasks/Events on the opportunity with a gong.io link). Gong links calls to opportunities by best-effort email/domain matching, so also list calls on the same Account that carry a different or blank Primary Opportunity and ask before filing them.
 2. For each new call, write `calls/<date>-<title>.gong-summary.md` containing every field verbatim (brief, key points, next steps, outcome, participants, duration, Gong URL) and add a Call log row marked "summary only".
 3. Merge the summary facts into `DEAL.md` the same way as ingest, but tag each such fact "(Gong summary, not transcript)". Never present a summary as a transcript.
-4. End by listing the Gong URLs of calls that have no full transcript filed, so the rep can download each transcript (Gong call page > More actions > Download transcript, if his permission profile allows it) into `inbox/` and run `ingest`.
+4. End by listing the Gong URLs of calls that have no full transcript filed, so the rep can download each transcript (Gong call page > More actions > Download transcript, if their permission profile allows it) into `inbox/` and run `ingest`.
 5. Two different endings, and they must not be confused:
    - The Salesforce connection is missing, or the connector exposes no Gong records at all: use the missing-connection rule below, then stop.
    - Salesforce answered and this opportunity simply has no Gong call records: say "No call activity in Salesforce for this deal. That is normal if your org does not have the Gong package. Nothing is wrong." and stop.
@@ -105,8 +105,8 @@ Resolve the deal first, as above. Print the current `DEAL.md` unchanged: no rebu
 
 ### `refresh <opportunity>`
 Rebuild `DEAL.md` from scratch: refresh the Salesforce fields through the connector, re-read every `.notes.md`, and rewrite all sections. Use when the brief has drifted or after a manual edit to the notes.
-1. **Ask before overwriting.** Say that this rebuilds `DEAL.md` from Salesforce and the filed call notes, and that any line he typed straight into `DEAL.md` which is not in a notes file will be lost. Then compare the current `DEAL.md` against the `.notes.md` files and the Salesforce fields it should have been built from: if any section holds text that is not traceable to a `.notes.md` file or to Salesforce, quote those lines back to him and ask before overwriting. Offer to show the changes first. On "no", stop and say to copy that text into `deal-judgment.md` or a notes file first.
-2. **Only rewrite after he confirms.** Before touching the original, copy it to `notes/DEAL-<YYYY-MM-DD-HHMM>.md`; do not delete or overwrite the original until that copy is written.
+1. **Ask before overwriting.** Say that this rebuilds `DEAL.md` from Salesforce and the filed call notes, and that any line the rep typed straight into `DEAL.md` which is not in a notes file will be lost. Then compare the current `DEAL.md` against the `.notes.md` files and the Salesforce fields it should have been built from: if any section holds text that is not traceable to a `.notes.md` file or to Salesforce, quote those lines back to the rep and ask before overwriting. Offer to show the changes first. On "no", stop and say to copy that text into `deal-judgment.md` or a notes file first.
+2. **Only rewrite after the rep confirms.** Before touching the original, copy it to `notes/DEAL-<YYYY-MM-DD-HHMM>.md`; do not delete or overwrite the original until that copy is written.
 3. Rewrite every section from the notes and the Salesforce fields, using `templates/DEAL.md`.
 4. **Close with 3 to 5 lines of what actually changed** ("Stage moved to 4, 2 new commitments, Read section now cites rule 18"), and name the backup file so the rep knows where any hand edit went.
 
@@ -114,9 +114,9 @@ Rebuild `DEAL.md` from scratch: refresh the Salesforce fields through the connec
 Table of all deal folders: opportunity, stage, close date, last call date, number of calls, one-line summary. Flag rooms with no call in 21+ days.
 
 ## Writing the "Read" section (thinking like the rep)
-Read `deal-judgment.md` first, every time. It holds the rep's own rules for what makes a deal real, how he reads stages, and how he wants close probability reasoned. Apply those rules explicitly: "Per your rule 3 (a partner on the call who asks about migration = real), this is real; per rule 7, a stated Q1 timeline with no budget owner is Best Case, not Commit." Never output a bare probability number. If the rules do not cover the situation, say which rule is missing so the rep can add it.
+Read `deal-judgment.md` first, every time. It holds the rep's own rules for what makes a deal real, how they read stages, and how the rep wants close probability reasoned. Apply those rules explicitly: "Per your rule 3 (a partner on the call who asks about migration = real), this is real; per rule 7, a stated Q1 timeline with no budget owner is Best Case, not Commit." Never output a bare probability number. If the rules do not cover the situation, say which rule is missing so the rep can add it.
 
-Before writing the first assessment of a session, scan `deal-judgment.md` for `[FILL]` markers and for rule text that still reads like the shipped starter example rather than the rep's own words. If any are found, say so once per session: name the specific rule numbers that are still blank, and separately name any rules you are relying on that look like unedited starter content. Offer to write his real rules into the file from what he tells you now. When an assessment then cites a rule flagged this way, add "(placeholder rule, not yet yours)" after the citation instead of citing it as settled fact. Do not hardcode rule numbers here; name whatever you find in his actual file.
+Before writing the first assessment of a session, scan `deal-judgment.md` for `[FILL]` markers and for rule text that still reads like the shipped starter example rather than the rep's own words. If any are found, say so once per session: name the specific rule numbers that are still blank, and separately name any rules you are relying on that look like unedited starter content. Offer to write their real rules into the file from what he tells you now. When an assessment then cites a rule flagged this way, add "(placeholder rule, not yet yours)" after the citation instead of citing it as settled fact. Do not hardcode rule numbers here; name whatever you find in their actual file.
 
 ## Rules
 - **Check the folder before doing anything.** The working folder must hold `deal-judgment.md` and a `deals/` folder. If either is missing, create nothing and write nothing: say "This folder is not set up yet. Run /start first. I am working in <absolute path>. That does not look like your Deals workspace. Open the Deals folder in Cowork, or say 'set up here' and I will run /start." and stop. Do not scaffold the workspace silently.
